@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50b" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Profile" representedClassName="Profile" syncable="YES">
+        <attribute name="bodyWeight" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" attributeType="String" syncable="YES"/>
+        <attribute name="password" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Session" representedClassName="Session" syncable="YES">
+        <attribute name="caloriesBurned" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cO2Emission" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modeOfTransport" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sessionName" attributeType="String" syncable="YES"/>
+        <attribute name="speed" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Profile" positionX="-4592" positionY="-3411" width="128" height="120"/>
+        <element name="Session" positionX="-4223" positionY="-3348" width="128" height="165"/>
+    </elements>
+</model>

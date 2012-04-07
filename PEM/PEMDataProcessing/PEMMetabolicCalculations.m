@@ -1,0 +1,13 @@
+//
+//  PEMMetabolicCalculations.m
+//  PEM
+//
+//  Created by Vladimir Hartmann on 07/04/2012.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "PEMMetabolicCalculations.h"
+
+@implementation PEMMetabolicCalculations
+
+@end

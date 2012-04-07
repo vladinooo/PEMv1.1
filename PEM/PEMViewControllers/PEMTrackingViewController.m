@@ -18,15 +18,16 @@
 @synthesize mapView;
 @synthesize trackingGPS;
 @synthesize calculationDelay;
-@synthesize latitudeLabel = _latitudeLabel;
-@synthesize longitudeLabel = _longitudeLabel;
-@synthesize horizontalAccuracyLabel = _horizontalAccuracyLabel;
-@synthesize altitudeLabel = _altitudeLabel;
-@synthesize altitudeFilterredLabel = _altitudeFilterredLabel;
-@synthesize verticalAccuracyLabel = _verticalAccuracyLabel;
-@synthesize distanceTraveledLabel = _distanceTraveledLabel;
-@synthesize speedLabel = _speedLabel;
+@synthesize horizontalAccuracy = _horizontalAccuracy;
+@synthesize altitude = _altitude;
+@synthesize filterredAltitude = _filterredAltitude;
+@synthesize verticalAccuracy = _verticalAccuracy;
+@synthesize distanceTraveled = _distanceTraveled;
+@synthesize grade = _grade;
+@synthesize speed = _speed;
 @synthesize time = _time;
+@synthesize vo2 = _vo2;
+@synthesize co2 = _co2;
 @synthesize stopWatchTimer;
 @synthesize calorieTimer;
 @synthesize tick;
@@ -36,6 +37,7 @@
 @synthesize locationDataObject;
 @synthesize locationDataCollection;
 @synthesize firstAltitudePoint;
+@synthesize basicGPSDataProcessing;
 
 
 
@@ -69,12 +71,14 @@
 }
 
 
-// get GPS data
+// Gather GPS data and send them to perform basic processing.
+// This method of CoreLocation framework is executed repeatadly in intervals.
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation {
 	
     CLLocation *newValidLocation;
     
+    // filter possible gps data errors
     newValidLocation = [self getNewValidLocation:newLocation];
     
     // create a starting point
@@ -82,113 +86,82 @@
         startingPoint = newValidLocation;
     }
 	
-	// get latitude
-	NSString *latitudeString = [[NSString alloc] initWithFormat:@"%g\u00B0", newValidLocation.coordinate.latitude];
-	_latitudeLabel.text = latitudeString;
-	
-	// get longitude
-	NSString *longitudeString = [[NSString alloc] initWithFormat:@"%g\u00B0", newValidLocation.coordinate.longitude];
-	_longitudeLabel.text = longitudeString;
-	
 	// get horizontal accuracy
-	NSString *horizontalAccuracyString = [[NSString alloc] initWithFormat:@"%gm", newValidLocation.horizontalAccuracy];
-	_horizontalAccuracyLabel.text = horizontalAccuracyString;
+	locationDataObject.horizontalAccuracy = newValidLocation.horizontalAccuracy;
+    _horizontalAccuracy.text = [locationDataObject getFormattedHorizontalAccuracy];
 	
-    // get altitude
-    NSString *altitudeString = [[NSString alloc] initWithFormat:@"%.2lf", newValidLocation.altitude];
-    _altitudeLabel.text = altitudeString;
+    // get altitude - basic
+    locationDataObject.altitude = newValidLocation.altitude;
+    _altitude.text = [locationDataObject getFormattedAltitude];
     
+    // get filterred altitude - every 10m
 	// set the initial location for altitude point
     if (firstAltitudePoint == nil) {
         firstAltitudePoint = newValidLocation;
     }
-    
-    // set current altitude point
-    double secondAltitudePoint = newValidLocation.altitude;
-    // every 10m release the altitude
-    if ([newValidLocation distanceFromLocation: firstAltitudePoint] >= 10) {
-        NSString *altitudeFilterredString = [[NSString alloc] initWithFormat:@"%.2lf", secondAltitudePoint];
-        _altitudeFilterredLabel.text = altitudeFilterredString;
-        firstAltitudePoint = newValidLocation;
+    CLLocation *secondAltitudePoint = newValidLocation;
+    if ([secondAltitudePoint distanceFromLocation: firstAltitudePoint] >= 10) {
+        locationDataObject.filterredAltitude = secondAltitudePoint.altitude;
+        _filterredAltitude.text = [locationDataObject getFormattedFilterredAltitude];
+        firstAltitudePoint = secondAltitudePoint;
     }
 	
 	// get vertical accuracy
-	NSString *verticalAccuracyString = [[NSString alloc] initWithFormat:@"%.2lf", newValidLocation.verticalAccuracy];
-	_verticalAccuracyLabel.text = verticalAccuracyString;
+    locationDataObject.verticalAccuracy = newValidLocation.verticalAccuracy;
+    _verticalAccuracy.text = [locationDataObject getFormattedVerticalAccuracy];
     
-    // get speed in m/s and conver to km/h
-    double speed = newValidLocation.speed * 3.6;
+    // get speed in m/s and convert to km/h
+    locationDataObject.speed = newValidLocation.speed * 3.6;
+    _speed.text = [locationDataObject getFormattedSpeed];
     
-    [self highestSpeed:speed];
-    
-    NSString *km =@" km/h";
-    if(speed >= 0) {
-        NSString *speedString = [[NSString alloc] initWithFormat:@"%.2lf%@",speed,km];
-        _speedLabel.text = speedString;
-    }	
+    // capture highest speed to show later in session details
+    highestSpeed = [basicGPSDataProcessing createHighestSpeed:highestSpeed:locationDataObject.speed];
     
     // calculate total distance only when the speed exceeds 2.5 km/h
     // this filters out calculating distance from non-accurate GPS data
     // when user is not moving
-    if (speed > 2.5) {
-        [self calculateTotalDistance:newLocation];
+    if (locationDataObject.speed > 2.5) {
+        totalDistance =
+        [basicGPSDataProcessing calculateTotalDistance:startingPoint:newValidLocation];
     }
     
-    // create locationData object (for testing only)
-    locationDataObject.altitude = _altitudeLabel.text;
-    locationDataObject.verticalAccuracy = _verticalAccuracyLabel.text;
-    locationDataObject.distanceTravelled = _distanceTraveledLabel.text;
-    locationDataObject.speed = _speedLabel.text;
+    // Only output distance if more than 0. This filters out some GPS invalid data
+    // in the initial satelite search on launch.
+    if (totalDistance > 0) {
+        locationDataObject.distanceTravelled = totalDistance;
+        _distanceTraveled.text = [locationDataObject getFormattedDistanceTravelled];
+        startingPoint = newValidLocation;
+    }
+
+    // calculate grade
+    locationDataObject.grade =
+    [basicGPSDataProcessing calculateGrade:firstAltitudePoint.altitude :secondAltitudePoint.altitude];
+    _grade.text = [locationDataObject getFormattedGrade];
     
+    
+    // calculate vo2
+    
+    
+    // calculate co2
     
     
     // store location data to plist for testing and filtering purposes
-    [locationDataCollection startSavingLocationData:locationDataObject];
+    [locationDataCollection saveLocationData:locationDataObject];
 	
 }
 
 
--(void)filterLatitude:(NSString *)verticalAccuracy:(CLLocation *)newValidLocation:(CLLocation *)oldLocation {
 
-    
-}
-
-
-// calculate total distance
-- (void)calculateTotalDistance:(CLLocation *)newLocation {
-    
-    // filter bad locations
-    CLLocation *newValidLocation = [self getNewValidLocation:newLocation];
-    
-    totalDistance += [newValidLocation distanceFromLocation:startingPoint];
-    
-    if (totalDistance > 0) {
-        
-        NSString *distanceString = [[NSString alloc] initWithFormat:@"%.2lf", totalDistance];
-        _distanceTraveledLabel.text = distanceString;
-        startingPoint = newValidLocation;
-    }
-    
-}
-
-// store the highest speed traveled to show in session details once finished tracking
-- (void)highestSpeed:(double)speed {
-    if(speed > highestSpeed) {
-        highestSpeed = speed;
-    }
-}
-
-
-// Basic-naive calorie expenditure calculation
+// Basic-naive calorie expenditure calculation (for testing only)
 - (void)calculateCalorieExpenditure {
     PEMProfile *tempProfile = dataCenter.profile;
-    double distance = [_distanceTraveledLabel.text doubleValue] * 0.000621;
+    double distance = [_distanceTraveled.text doubleValue] * 0.000621;
     double burnedCalories = [[tempProfile valueForKey:@"bodyWeight"] doubleValue] * 0.53 * distance;
     _calories.text = [NSString stringWithFormat:@"%.2g", burnedCalories];
 }
 
 
-// Core Location filter
+// GPS location data filter
 - (CLLocation *)getNewValidLocation:(CLLocation *)newLocation {
     
     // filter out nil locations
@@ -216,12 +189,10 @@
 } 
 
 
-// Core Location filter - get new location helper method
+// GPS location data filter (helper method)
 - (void)getNewLocation {
-    
     // getting valid location
-    [self stopTracking:startTrackingButtonSender];
-    [self resetTracking];
+    [self stopTracking];
     [self startTracking:startTrackingButtonSender];
 }
 
@@ -267,9 +238,9 @@
 }
 
 
-// stop gps tracking and timer
-- (IBAction)stopTracking:(id)sender {
-	[locationManager stopUpdatingLocation];
+// pause gps tracking and timer
+- (IBAction)pauseTracking:(id)sender {
+    [locationManager stopUpdatingLocation];
     [self stopTimer];
     trackingGPS = FALSE;
 }
@@ -280,37 +251,33 @@
     [[UIAlertView alloc] initWithTitle:@"Save the session?" 
                                message:nil
                               delegate:self
-                     cancelButtonTitle:@"Cancel"
-                     otherButtonTitles:@"OK", nil];
+                     cancelButtonTitle:@"No"
+                     otherButtonTitles:@"Yes", nil];
     
     resetSessionAlert.tag = 2;
     [resetSessionAlert show]; 
 }
 
 
-// reset gps tracking and timer
-- (void)resetTracking {
-	[locationManager stopUpdatingLocation];
-    
-    [self resetLabels];
+// stop and reset gps tracking and timer
+- (void)stopTracking {
+    [self pauseTracking:startTrackingButtonSender];
     
     // reseting total distance
     totalDistance = 0;
     
-    [self stopTimer];
+    [self resetLabels];
     [self resetTimer];
-    trackingGPS = FALSE;
 }
 
 
 - (void)resetLabels {
-    _latitudeLabel.text = @"0.00";
-	_longitudeLabel.text = @"0.00";
-	_horizontalAccuracyLabel.text = @"0.00";
-	_altitudeLabel.text = @"0.00";
-	_verticalAccuracyLabel.text = @"0.00";
-	_distanceTraveledLabel.text = @"0.00";
-	_speedLabel.text = @"0 km/h";
+	_horizontalAccuracy.text = @"0.00";
+	_altitude.text = @"0.00";
+    _filterredAltitude.text = @"0.00";
+	_verticalAccuracy.text = @"0.00";
+	_distanceTraveled.text = @"0.00";
+	_speed.text = @"0.00 km/h";
     _time.text = @"00:00:00";
     _calories.text = @"0";
 }
@@ -398,13 +365,13 @@
             
             // Cancel button
             if (buttonIndex == 0) {
-                [self resetTracking];
+                [self stopTracking];
             }
             
             // Save button
             if (buttonIndex == 1) {
                 [self captureSessionData];
-                
+                [self stopTracking];
                 // switch to save session view
                 PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"saveSession"];
                 [self.navigationController pushViewController:trackingVC animated:YES];
@@ -424,7 +391,7 @@
     tempSession.sessionName = @"";
     tempSession.modeOfTransport = @"";
     tempSession.caloriesBurned = _calories.text;
-    tempSession.distance = _distanceTraveledLabel.text;
+    tempSession.distance = _distanceTraveled.text;
     tempSession.time = _time.text;
     tempSession.speed = [NSString stringWithFormat:@"%f", highestSpeed];
     tempSession.cO2Emission = @"";
@@ -469,16 +436,18 @@
 - (void)viewDidUnload {
     
     self.locationManager = nil;
-	self.latitudeLabel = nil;
-	self.longitudeLabel = nil;
-	self.horizontalAccuracyLabel = nil;
-	self.altitudeLabel = nil;
-	self.verticalAccuracyLabel = nil;
-	self.distanceTraveledLabel = nil;
-	self.speedLabel = nil;
+	self.horizontalAccuracy = nil;
+	self.altitude = nil;
+	self.verticalAccuracy = nil;
+	self.distanceTraveled = nil;
+	self.speed = nil;
     self.time = nil;
-    self.altitudeFilterredLabel = nil;
-    
+    self.calories = nil;
+    self.filterredAltitude = nil;
+    self.vo2 = nil;
+    self.co2 = nil;
+    self.grade = nil;
+    self.filterredAltitude = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

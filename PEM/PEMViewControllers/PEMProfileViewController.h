@@ -36,11 +36,7 @@
 
 
 
-
-- (void)loadProfileData;
-- (void)updateProfileData: (UITextField *)theTextField;
 - (IBAction)showOptions:(id)sender;
-- (void)logout;
 - (IBAction)selectBodyWeight:(id)sender;
 -(void)progressHUDWheelStart;
 -(void)progressHUDWheelStop;

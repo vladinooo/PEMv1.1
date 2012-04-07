@@ -14,6 +14,7 @@
 @property (nonatomic, retain) NSMutableArray *locationData;
 
 
--(void)startSavingLocationData:(PEMLocationData *)locationDataObject;
+-(void)saveLocationData:(PEMLocationData *)locationDataObject;
+
 
 @end

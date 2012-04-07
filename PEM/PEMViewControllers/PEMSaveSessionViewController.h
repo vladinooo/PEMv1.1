@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *statusMessage;
 @property (weak, nonatomic) IBOutlet UITextField *sessionName;
 
-- (void)switchBackToTrackingView;
 
 - (IBAction)saveSession:(id)sender;
 - (IBAction)cancelSaveSession:(id)sender;

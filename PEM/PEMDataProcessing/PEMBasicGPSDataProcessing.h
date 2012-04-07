@@ -7,7 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+
 
 @interface PEMBasicGPSDataProcessing : NSObject
+
+
+-(CLLocationDistance)calculateTotalDistance:(CLLocation *)startingPoint:(CLLocation *)newValidLocation;
+
+-(double)createHighestSpeed:(double)highestSpeed:(double)speed;
+
+-(double)calculateGrade:(double)firstAltitudePoint:(double)secondAltitudePoint;
+
 
 @end

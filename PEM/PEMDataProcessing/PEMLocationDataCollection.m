@@ -33,7 +33,7 @@
 }
 
 
--(void)startSavingLocationData:(PEMLocationData *)locationDataObject {
+-(void)saveLocationData:(PEMLocationData *)locationDataObject {
     
     // get paths from root direcory
     NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
@@ -43,19 +43,22 @@
     NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"PEMLocationDataStorage.plist"];
     
     // create location data records string
-    NSString *altitude = locationDataObject.altitude;
-    NSString *altitudeRecord = [[NSString alloc] initWithFormat:@"Altitude: %@", altitude];    
+    NSString *altitude = [locationDataObject getFormattedAltitude];
+    NSString *altitudeRecord = [[NSString alloc] initWithFormat:@"Altitude: %@", altitude];
+    
+    NSString *filterredAltitude = [locationDataObject getFormattedFilterredAltitude];
+    NSString *filterredAltitudeRecord = [[NSString alloc] initWithFormat:@"Filterred altitude: %@", filterredAltitude];    
 
-    NSString *verticalAccuracy = locationDataObject.verticalAccuracy;
+    NSString *verticalAccuracy = [locationDataObject getFormattedVerticalAccuracy];
     NSString *verticalAccuracyRecord = [[NSString alloc] initWithFormat:@"Vertical Accuracy:  %@", verticalAccuracy];    
     
-    NSString *distanceTravelled = locationDataObject.distanceTravelled;
+    NSString *distanceTravelled = [locationDataObject getFormattedDistanceTravelled];
     NSString *distanceTravelledRecord = [[NSString alloc] initWithFormat:@"Distance travelled: %@", distanceTravelled];    
     
-    NSString *speed = locationDataObject.speed;
+    NSString *speed = [locationDataObject getFormattedSpeed];
     NSString *speedRecord = [[NSString alloc] initWithFormat:@"Speed: %@", speed];    
     
-    NSString *locationDataRecord = [[NSString alloc] initWithFormat: @"%@, %@, %@, %@", altitudeRecord, verticalAccuracyRecord, distanceTravelledRecord, speedRecord];
+    NSString *locationDataRecord = [[NSString alloc] initWithFormat: @"%@, %@, %@, %@", altitudeRecord, filterredAltitudeRecord, verticalAccuracyRecord, distanceTravelledRecord, speedRecord];
     
     NSLog(@"Data: %@", locationDataRecord);
 

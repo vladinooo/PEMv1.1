@@ -14,31 +14,29 @@
 @synthesize dbAccess;
 @synthesize locationManager;
 @synthesize startingPoint;
-@synthesize totalDistance;
 @synthesize mapView;
 @synthesize trackingGPS;
 @synthesize calculationDelay;
 @synthesize horizontalAccuracy = _horizontalAccuracy;
-@synthesize altitude = _altitude;
-@synthesize filterredAltitude = _filterredAltitude;
-@synthesize verticalAccuracy = _verticalAccuracy;
+@synthesize elevation = _elevation;
 @synthesize distanceTraveled = _distanceTraveled;
 @synthesize grade = _grade;
 @synthesize speed = _speed;
 @synthesize time = _time;
 @synthesize vo2 = _vo2;
 @synthesize co2 = _co2;
+@synthesize calories = _calories;
 @synthesize stopWatchTimer;
+@synthesize vo2Timer;
 @synthesize calorieTimer;
 @synthesize tick;
-@synthesize calories = _calories;
 @synthesize startTrackingButtonSender;
 @synthesize highestSpeed;
 @synthesize locationDataObject;
 @synthesize locationDataCollection;
-@synthesize firstAltitudePoint;
-@synthesize basicGPSDataProcessing;
-
+@synthesize elevationCaptureStartPoint;
+@synthesize metabolicCalculations;
+@synthesize elevationRequest;
 
 
 // start gps tracking and timer
@@ -62,16 +60,22 @@
         [locationManager startUpdatingLocation];
         mapView.showsUserLocation = YES;
         
-        [self startTimer];
         trackingGPS = TRUE;
         
-        calorieTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(calculateCalorieExpenditure) userInfo:nil repeats:YES];
+        // start timer
+        [self startTimer];
+        
+        // start calculating VO2
+        vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateWalkingVo2) userInfo:nil repeats:YES];
+        
+        // start calculating kcal expenditure
+        calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
         
     }
 }
 
 
-// Gather GPS data and send them to perform basic processing.
+// Gather GPS data and perform basic processing.
 // This method of CoreLocation framework is executed repeatadly in intervals.
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation {
@@ -85,80 +89,152 @@
     if (startingPoint == nil) {
         startingPoint = newValidLocation;
     }
-	
-	// get horizontal accuracy
-	locationDataObject.horizontalAccuracy = newValidLocation.horizontalAccuracy;
-    _horizontalAccuracy.text = [locationDataObject getFormattedHorizontalAccuracy];
-	
-    // get altitude - basic
-    locationDataObject.altitude = newValidLocation.altitude;
-    _altitude.text = [locationDataObject getFormattedAltitude];
     
-    // get filterred altitude - every 10m
-	// set the initial location for altitude point
-    if (firstAltitudePoint == nil) {
-        firstAltitudePoint = newValidLocation;
-    }
-    CLLocation *secondAltitudePoint = newValidLocation;
-    if ([secondAltitudePoint distanceFromLocation: firstAltitudePoint] >= 10) {
-        locationDataObject.filterredAltitude = secondAltitudePoint.altitude;
-        _filterredAltitude.text = [locationDataObject getFormattedFilterredAltitude];
-        firstAltitudePoint = secondAltitudePoint;
-    }
-	
-	// get vertical accuracy
-    locationDataObject.verticalAccuracy = newValidLocation.verticalAccuracy;
-    _verticalAccuracy.text = [locationDataObject getFormattedVerticalAccuracy];
+    // only start GPS tracking if horizontal accuracy is < 10m
+    if (newValidLocation.horizontalAccuracy > 10) {
     
-    // get speed in m/s and convert to km/h
-    locationDataObject.speed = newValidLocation.speed * 3.6;
-    _speed.text = [locationDataObject getFormattedSpeed];
-    
-    // capture highest speed to show later in session details
-    highestSpeed = [basicGPSDataProcessing createHighestSpeed:highestSpeed:locationDataObject.speed];
-    
-    // calculate total distance only when the speed exceeds 2.5 km/h
-    // this filters out calculating distance from non-accurate GPS data
-    // when user is not moving
-    if (locationDataObject.speed > 2.5) {
-        totalDistance =
-        [basicGPSDataProcessing calculateTotalDistance:startingPoint:newValidLocation];
+        // Start activity indicator animation
+        [self progressHUDWheelStart];
     }
     
-    // Only output distance if more than 0. This filters out some GPS invalid data
-    // in the initial satelite search on launch.
-    if (totalDistance > 0) {
-        locationDataObject.distanceTravelled = totalDistance;
-        _distanceTraveled.text = [locationDataObject getFormattedDistanceTravelled];
-        startingPoint = newValidLocation;
-    }
+    else {
+        
+        // Stop activity indicator animation
+        [self progressHUDWheelStop];
+            
+        // get horizontal accuracy
+        locationDataObject.horizontalAccuracy = newValidLocation.horizontalAccuracy;
+        _horizontalAccuracy.text = [locationDataObject getFormattedHorizontalAccuracy];
+        
+        // get elevation (altitude) - inaccurate, captured by CoreLocation, only for testing
+        locationDataObject.altitude = newValidLocation.altitude;
+        
+        // get vertical accuracy
+        locationDataObject.verticalAccuracy = newValidLocation.verticalAccuracy;
+        
+        // get accurate elevation (altitude) from Google Maps - every 10m
+        // set the initial location for elevation point
+        if (elevationCaptureStartPoint == nil) {
+            
+            elevationCaptureStartPoint = newValidLocation;
+            
+            dispatch_queue_t myQueue1 = dispatch_queue_create("pem.myQueue1", 0);
+            dispatch_async(myQueue1, ^{
+                
+                [elevationRequest requestElevation:elevationCaptureStartPoint.coordinate.latitude :elevationCaptureStartPoint.coordinate.longitude];
+                
+                while (!elevationRequest.isDownloaded) {
+                    NSLog(@"Downloading...");
+                }
+                                            
+                locationDataObject.elevationOne = elevationRequest.elevation;
+                elevationRequest.isDownloaded = false;
+                
+                NSLog(@"ElevationOne is %f", locationDataObject.elevationOne);
+                
+            });
 
-    // calculate grade
-    locationDataObject.grade =
-    [basicGPSDataProcessing calculateGrade:firstAltitudePoint.altitude :secondAltitudePoint.altitude];
-    _grade.text = [locationDataObject getFormattedGrade];
+            
+        }
+        
+        CLLocation *elevationCaptureFinishPoint = newValidLocation;
+        if ([elevationCaptureFinishPoint distanceFromLocation: elevationCaptureStartPoint] >= 10) {
+            
+            dispatch_queue_t myQueue2 = dispatch_queue_create("pem.myQueue2", 0);
+            dispatch_async(myQueue2, ^{
+                
+                [elevationRequest requestElevation:elevationCaptureFinishPoint.coordinate.latitude :elevationCaptureFinishPoint.coordinate.longitude];
+
+                while (!elevationRequest.isDownloaded) {
+                    NSLog(@"Downloading...");
+                }
+                
+                locationDataObject.elevationTwo = elevationRequest.elevation;
+                _elevation.text = [locationDataObject getFormattedElevationTwo];
+                
+                elevationRequest.isDownloaded = false;
+
+                
+                // calculate grade on distance of 10m
+                locationDataObject.grade = [self calculateGrade:locationDataObject.elevationOne :locationDataObject.elevationTwo];
+                                
+                _grade.text = [locationDataObject getFormattedGrade];
+                
+                elevationCaptureStartPoint = newValidLocation;
+            
+                NSLog(@"ElevationTwo is %f", locationDataObject.elevationTwo);
+
+            });
+            
+            
+        }
+        
+        
+        // get speed in m/s
+        locationDataObject.speed = newValidLocation.speed;
+        _speed.text = [locationDataObject getFormattedSpeed];
+        
+        // capture highest speed to show later in session details
+        if(locationDataObject.speed > highestSpeed) {
+            highestSpeed = locationDataObject.speed;
+        }
+        
+        
+        // calculate total distance only when the speed exceeds 0.70 m/s or 2.5 km/h
+        // this filters out calculating distance from non-accurate GPS data
+        // when user is not moving
+        if (locationDataObject.speed > 0.70) {
+            locationDataObject.distanceTravelled += [newValidLocation distanceFromLocation:startingPoint];
+            _distanceTraveled.text = [locationDataObject getFormattedDistanceTravelled];
+            startingPoint = newValidLocation;
+        }
+        
+        
+        // store location data to plist for testing and filtering purposes
+        [locationDataCollection saveLocationData:locationDataObject];
+        
+
+    }
     
     
-    // calculate vo2
-    
-    
-    // calculate co2
-    
-    
-    // store location data to plist for testing and filtering purposes
-    [locationDataCollection saveLocationData:locationDataObject];
-	
 }
 
 
-
-// Basic-naive calorie expenditure calculation (for testing only)
-- (void)calculateCalorieExpenditure {
-    PEMProfile *tempProfile = dataCenter.profile;
-    double distance = [_distanceTraveled.text doubleValue] * 0.000621;
-    double burnedCalories = [[tempProfile valueForKey:@"bodyWeight"] doubleValue] * 0.53 * distance;
-    _calories.text = [NSString stringWithFormat:@"%.2g", burnedCalories];
+// Start activity indicator animation
+-(void)progressHUDWheelStart {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Initialising...";
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{});
 }
+
+// Stop activity indicator animation
+-(void)progressHUDWheelStop {
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{[MBProgressHUD hideHUDForView:self.view animated:YES];});
+}
+
+// calculate grade on distance of 10m
+-(double)calculateGrade:(double)elevationOne:(double)elevationTwo {
+    
+    double rise = elevationTwo - elevationOne;
+    double grade = rise / 10;
+    return grade;
+}
+
+
+-(void)callCalculateWalkingVo2 {
+    // calculate walking vo2
+    locationDataObject.vo2 += [metabolicCalculations calculateWalkingVo2:locationDataObject];
+    _vo2.text = [locationDataObject getFormattedVo2];
+}
+
+
+-(void)callCalculateCalorieExpenditure {
+    // calculate calories
+    locationDataObject.calories += [metabolicCalculations calculateCalorieExpenditure:locationDataObject.vo2];
+    _calories.text = [locationDataObject getFormattedCalories];
+}
+
 
 
 // GPS location data filter
@@ -242,6 +318,8 @@
 - (IBAction)pauseTracking:(id)sender {
     [locationManager stopUpdatingLocation];
     [self stopTimer];
+    [vo2Timer invalidate];
+    [calorieTimer invalidate];
     trackingGPS = FALSE;
 }
 
@@ -263,8 +341,23 @@
 - (void)stopTracking {
     [self pauseTracking:startTrackingButtonSender];
     
+    [vo2Timer invalidate];
+    [calorieTimer invalidate];
+    
     // reseting total distance
-    totalDistance = 0;
+    locationDataObject.horizontalAccuracy = 0;
+    locationDataObject.altitude = 0;
+    locationDataObject.elevationOne = 0;
+    locationDataObject.elevationTwo = 0;
+    locationDataObject.verticalAccuracy = 0;
+    locationDataObject.distanceTravelled = 0;
+    locationDataObject.speed = 0;
+    locationDataObject.grade = 0;
+    locationDataObject.vo2 = 0;
+    locationDataObject.timeString = 0;
+    locationDataObject.calories = 0;
+    elevationCaptureStartPoint = nil;
+
     
     [self resetLabels];
     [self resetTimer];
@@ -273,12 +366,12 @@
 
 - (void)resetLabels {
 	_horizontalAccuracy.text = @"0.00";
-	_altitude.text = @"0.00";
-    _filterredAltitude.text = @"0.00";
-	_verticalAccuracy.text = @"0.00";
+	_elevation.text = @"0.00";
 	_distanceTraveled.text = @"0.00";
 	_speed.text = @"0.00 km/h";
+    _grade.text = @"0.00";
     _time.text = @"00:00:00";
+    _vo2.text = @"0.00";
     _calories.text = @"0";
 }
 
@@ -312,7 +405,8 @@
     hours = tick / 3600;
     minutes = (tick % 3600) / 60;
     seconds = (tick %3600) % 60;
-    _time.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+    locationDataObject.timeString = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+    _time.text = locationDataObject.timeString;
 }
 
 
@@ -415,6 +509,8 @@
     dbAccess = [[PEMDatabaseAccess alloc] init];
     locationDataObject = [[PEMLocationData alloc] init];
     locationDataCollection = [[PEMLocationDataCollection alloc] init];
+    metabolicCalculations = [[PEMMetabolicCalculations alloc] init];
+    elevationRequest = [[PEMElevationRequest alloc] init];
     
     trackingGPS = FALSE;
     calculationDelay = TRUE;
@@ -437,17 +533,14 @@
     
     self.locationManager = nil;
 	self.horizontalAccuracy = nil;
-	self.altitude = nil;
-	self.verticalAccuracy = nil;
+	self.elevation = nil;
 	self.distanceTraveled = nil;
 	self.speed = nil;
     self.time = nil;
     self.calories = nil;
-    self.filterredAltitude = nil;
     self.vo2 = nil;
     self.co2 = nil;
     self.grade = nil;
-    self.filterredAltitude = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

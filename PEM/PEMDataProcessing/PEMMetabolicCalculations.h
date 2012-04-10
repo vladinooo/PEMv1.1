@@ -7,7 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PEMProfile.h"
+#import "PEMDataCenter.h"
+#import "PEMLocationData.h"
 
 @interface PEMMetabolicCalculations : NSObject
+
+@property (strong, nonatomic) PEMDataCenter *dataCenter;
+
+-(double)calculateWalkingVo2:(PEMLocationData *)locationDataObject;
+
+-(double)calculateCalorieExpenditure:(double)vO2;
+
 
 @end

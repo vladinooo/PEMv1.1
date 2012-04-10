@@ -103,7 +103,8 @@
 
 
 -(void)progressHUDWheelStart {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Uploading...";
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{});
 }
 
@@ -251,11 +252,10 @@
     // initialize the picker view array with weight
     NSMutableArray *values = [[NSMutableArray alloc] init];
     
-    for ( int i = 84; i <= 364; ++i ) {
+    for ( int i = 40; i <= 200; ++i ) {
         NSString *weight = [NSString stringWithFormat:@"%d",i];
-        NSString *zero = @",0";
-        NSString *pounds = @"lb";
-        NSString *totalWeight = [NSString stringWithFormat:@"%@%@ %@",weight,zero,pounds];
+        NSString *kg = @"kg";
+        NSString *totalWeight = [NSString stringWithFormat:@"%@ %@",weight,kg];
         
         [values addObject:[NSString stringWithString:totalWeight]];
     }

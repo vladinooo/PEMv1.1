@@ -16,7 +16,10 @@
 #import "PEMSession.h"
 #import "PEMLocationData.h"
 #import "PEMLocationDataCollection.h"
-#import "PEMBasicGPSDataProcessing.h"
+#import "PEMMetabolicCalculations.h"
+#import "PEMElevationRequest.h"
+#import "MBProgressHUD.h"
+
 
 @interface PEMTrackingViewController : UIViewController <CLLocationManagerDelegate, UIAlertViewDelegate>
 
@@ -24,36 +27,33 @@
 @property (strong, nonatomic) PEMDatabaseAccess *dbAccess;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *startingPoint;
-@property (nonatomic) CLLocationDistance totalDistance;
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic) BOOL trackingGPS;
 @property (nonatomic) BOOL calculationDelay;
 @property (weak, nonatomic) IBOutlet UILabel *horizontalAccuracy;
-@property (weak, nonatomic) IBOutlet UILabel *altitude;
-@property (weak, nonatomic) IBOutlet UILabel *filterredAltitude;
-@property (weak, nonatomic) IBOutlet UILabel *verticalAccuracy;
+@property (weak, nonatomic) IBOutlet UILabel *elevation;
 @property (weak, nonatomic) IBOutlet UILabel *distanceTraveled;
 @property (weak, nonatomic) IBOutlet UILabel *grade;
 @property (weak, nonatomic) IBOutlet UILabel *speed;
 @property (weak, nonatomic) IBOutlet UILabel *time;
 @property (weak, nonatomic) IBOutlet UILabel *vo2;
 @property (weak, nonatomic) IBOutlet UILabel *co2;
+@property (weak, nonatomic) IBOutlet UILabel *calories;
 @property (strong, nonatomic) NSTimer *stopWatchTimer;
+@property (strong, nonatomic) NSTimer *vo2Timer;
 @property (strong, nonatomic) NSTimer *calorieTimer;
 @property (nonatomic) int tick;
-@property (weak, nonatomic) IBOutlet UILabel *calories;
 @property (strong) id startTrackingButtonSender;
 @property (nonatomic) double highestSpeed;
 @property (strong, nonatomic) PEMLocationDataCollection *locationDataCollection;
 @property (strong, nonatomic) PEMLocationData *locationDataObject;
-@property (strong, nonatomic) CLLocation *firstAltitudePoint;
-@property (strong, nonatomic) PEMBasicGPSDataProcessing *basicGPSDataProcessing;
+@property (strong, nonatomic) CLLocation *elevationCaptureStartPoint;
+@property (strong, nonatomic) PEMMetabolicCalculations *metabolicCalculations;
+@property (strong, nonatomic) PEMElevationRequest *elevationRequest;
 
-
-
-- (IBAction)startTracking:(id)sender;
-- (IBAction)pauseTracking:(id)sender;
-- (IBAction)saveSessionAlert:(id)sender;
+-(IBAction)startTracking:(id)sender;
+-(IBAction)pauseTracking:(id)sender;
+-(IBAction)saveSessionAlert:(id)sender;
 
 
 @end

@@ -12,22 +12,27 @@
 
 @synthesize horizontalAccuracy;
 @synthesize altitude;
-@synthesize filterredAltitude;
+@synthesize elevationOne;
+@synthesize elevationTwo;
 @synthesize verticalAccuracy;
 @synthesize distanceTravelled;
 @synthesize speed;
 @synthesize grade;
 @synthesize vo2;
+@synthesize calories;
 @synthesize co2;
 
 @synthesize horizontalAccuracyString;
 @synthesize altitudeString;
-@synthesize filterredAltitudeString;
+@synthesize elevationOneString;
+@synthesize elevationTwoString;
 @synthesize verticalAccuracyString;
 @synthesize distanceTravelledString;
 @synthesize speedString;
 @synthesize gradeString;
 @synthesize vo2String;
+@synthesize timeString;
+@synthesize caloriesString;
 @synthesize co2String;
 
 
@@ -39,8 +44,12 @@
     return altitudeString = [[NSString alloc] initWithFormat:@"%.2lf", altitude];
 }
 
--(NSString *)getFormattedFilterredAltitude {
-    return filterredAltitudeString = [[NSString alloc] initWithFormat:@"%.2lf", filterredAltitude];
+-(NSString *)getFormattedElevationOne {
+    return elevationOneString = [[NSString alloc] initWithFormat:@"%.2lf", elevationOne];
+}
+
+-(NSString *)getFormattedElevationTwo {
+    return elevationTwoString = [[NSString alloc] initWithFormat:@"%.2lf", elevationTwo];
 }
 
 -(NSString *)getFormattedVerticalAccuracy {
@@ -55,10 +64,13 @@
     
     NSString *km =@" km/h";
     if(speed >= 0) {
-        return speedString = [[NSString alloc] initWithFormat:@"%.2lf%@", speed, km];
+        // from m/s to km/h
+        double tempSpeed = speed;
+        tempSpeed = tempSpeed * 3.6;
+        return speedString = [[NSString alloc] initWithFormat:@"%.2lf %@", tempSpeed, km];
     }
     else {
-        return @"hahaha";
+        return @"0.00 km/h";
     }
 }
 
@@ -68,6 +80,14 @@
 
 -(NSString *)getFormattedVo2 {
     return vo2String = [[NSString alloc] initWithFormat:@"%.2lf", vo2];
+}
+
+-(NSString *)getFormattedTime {
+    return timeString;
+}
+
+-(NSString *)getFormattedCalories {
+    return caloriesString = [[NSString alloc] initWithFormat:@"%.2lf", calories];
 }
 
 -(NSString *)getFormattedco2 {

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		850D160D14B3C425006F855F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 850D160C14B3C425006F855F /* MapKit.framework */; };
 		850D161014B3C42B006F855F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 850D160F14B3C42B006F855F /* CoreLocation.framework */; };
+		8510AC951535974B0095135E /* PEMCO2EmissionCalculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8510AC941535974B0095135E /* PEMCO2EmissionCalculations.m */; };
+		8510AC98153597780095135E /* PEMCO2EmissionRecommendations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8510AC97153597780095135E /* PEMCO2EmissionRecommendations.m */; };
 		852F36ED1533490A0087D826 /* PEMElevationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 852F36EC153349090087D826 /* PEMElevationRequest.m */; };
 		852F375215336DC10087D826 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 852F373A15336DC10087D826 /* NSObject+SBJson.m */; };
 		852F375315336DC10087D826 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 852F373D15336DC10087D826 /* SBJsonParser.m */; };
@@ -105,6 +107,10 @@
 /* Begin PBXFileReference section */
 		850D160C14B3C425006F855F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		850D160F14B3C42B006F855F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		8510AC931535974B0095135E /* PEMCO2EmissionCalculations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMCO2EmissionCalculations.h; path = PEMDataProcessing/PEMCO2EmissionCalculations.h; sourceTree = "<group>"; };
+		8510AC941535974B0095135E /* PEMCO2EmissionCalculations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMCO2EmissionCalculations.m; path = PEMDataProcessing/PEMCO2EmissionCalculations.m; sourceTree = "<group>"; };
+		8510AC96153597780095135E /* PEMCO2EmissionRecommendations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMCO2EmissionRecommendations.h; path = PEMDataProcessing/PEMCO2EmissionRecommendations.h; sourceTree = "<group>"; };
+		8510AC97153597780095135E /* PEMCO2EmissionRecommendations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMCO2EmissionRecommendations.m; path = PEMDataProcessing/PEMCO2EmissionRecommendations.m; sourceTree = "<group>"; };
 		852F36EB153349090087D826 /* PEMElevationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMElevationRequest.h; path = PEMDataProcessing/PEMElevationRequest.h; sourceTree = "<group>"; };
 		852F36EC153349090087D826 /* PEMElevationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMElevationRequest.m; path = PEMDataProcessing/PEMElevationRequest.m; sourceTree = "<group>"; };
 		852F373915336DC10087D826 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+SBJson.h"; path = "JSON/NSObject+SBJson.h"; sourceTree = "<group>"; };
@@ -256,6 +262,8 @@
 		8530875A152F2FCA00EE04C9 /* PEMDataProcessing */ = {
 			isa = PBXGroup;
 			children = (
+				852F36EB153349090087D826 /* PEMElevationRequest.h */,
+				852F36EC153349090087D826 /* PEMElevationRequest.m */,
 				85308769152F36F300EE04C9 /* PEMLocationData.h */,
 				8530876A152F36F300EE04C9 /* PEMLocationData.m */,
 				8530875D152F300300EE04C9 /* PEMLocationDataCollection.h */,
@@ -263,8 +271,10 @@
 				8530875F152F300300EE04C9 /* PEMLocationDataStorage.plist */,
 				85F51D6B1530BDA8000F69CA /* PEMMetabolicCalculations.h */,
 				85F51D6C1530BDA8000F69CA /* PEMMetabolicCalculations.m */,
-				852F36EB153349090087D826 /* PEMElevationRequest.h */,
-				852F36EC153349090087D826 /* PEMElevationRequest.m */,
+				8510AC931535974B0095135E /* PEMCO2EmissionCalculations.h */,
+				8510AC941535974B0095135E /* PEMCO2EmissionCalculations.m */,
+				8510AC96153597780095135E /* PEMCO2EmissionRecommendations.h */,
+				8510AC97153597780095135E /* PEMCO2EmissionRecommendations.m */,
 			);
 			name = PEMDataProcessing;
 			sourceTree = "<group>";
@@ -542,6 +552,8 @@
 				852F375B15336DC10087D826 /* SBJsonTokeniser.m in Sources */,
 				852F375C15336DC10087D826 /* SBJsonUTF8Stream.m in Sources */,
 				852F375D15336DC10087D826 /* SBJsonWriter.m in Sources */,
+				8510AC951535974B0095135E /* PEMCO2EmissionCalculations.m in Sources */,
+				8510AC98153597780095135E /* PEMCO2EmissionRecommendations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

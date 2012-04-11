@@ -16,7 +16,6 @@
 @synthesize startingPoint;
 @synthesize mapView;
 @synthesize trackingGPS;
-@synthesize calculationDelay;
 @synthesize horizontalAccuracy = _horizontalAccuracy;
 @synthesize elevation = _elevation;
 @synthesize distanceTraveled = _distanceTraveled;
@@ -24,10 +23,11 @@
 @synthesize speed = _speed;
 @synthesize time = _time;
 @synthesize vo2 = _vo2;
-@synthesize co2 = _co2;
+@synthesize co2Emissions = _co2Emissions;
 @synthesize calories = _calories;
 @synthesize stopWatchTimer;
 @synthesize vo2Timer;
+@synthesize co2EmissionsTimer;
 @synthesize calorieTimer;
 @synthesize tick;
 @synthesize startTrackingButtonSender;
@@ -37,6 +37,8 @@
 @synthesize elevationCaptureStartPoint;
 @synthesize metabolicCalculations;
 @synthesize elevationRequest;
+@synthesize activity;
+@synthesize co2EmissionCalculations;
 
 
 // start gps tracking and timer
@@ -65,11 +67,63 @@
         // start timer
         [self startTimer];
         
-        // start calculating VO2
-        vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateWalkingVo2) userInfo:nil repeats:YES];
+        if ([activity isEqualToString:@"Walk"]) {
+            
+            // trigger calculating walking VO2 every 1min
+            vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateWalkingVo2) userInfo:nil repeats:YES];
+            
+            // trigger calculating kcal expenditure every 1min
+            calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
+        }
         
-        // start calculating kcal expenditure
-        calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
+        if ([activity isEqualToString:@"Run"]) {
+            
+            // trigger calculating running VO2 every 1min
+            vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateRunningVo2) userInfo:nil repeats:YES];
+            
+            // trigger calculating kcal expenditure every 1min
+            calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
+        
+        }
+        
+        if ([activity isEqualToString:@"Car"]) {
+            
+            // trigger calculating traveling by car VO2 every 1min
+            vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateTravelingByCarVo2) userInfo:nil repeats:YES];
+            
+            // trigger calculating kcal expenditure every 1min
+            calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
+            
+            // trigger calculating traveling by car co2 Emissions every 1s
+            co2EmissionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(callCalculateTravelingByCarCo2Emissions) userInfo:nil repeats:YES];
+            
+        }
+        
+        if ([activity isEqualToString:@"Bus"]) {
+            
+            // trigger calculating traveling by bus VO2 every 1min
+            vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateTravelingByBusVo2) userInfo:nil repeats:YES];
+            
+            // trigger calculating kcal expenditure every 1min
+            calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
+            
+            // trigger calculating traveling by bus co2 Emissions every 1s
+            co2EmissionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(callCalculateTravelingByBusCo2Emissions) userInfo:nil repeats:YES];
+            
+        }
+        
+        if ([activity isEqualToString:@"Train"]) {
+            
+            // trigger calculating traveling by train VO2 every 1min
+            vo2Timer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateTravelingByTrainVo2) userInfo:nil repeats:YES];
+            
+            // trigger calculating kcal expenditure every 1min
+            calorieTimer = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(callCalculateCalorieExpenditure) userInfo:nil repeats:YES];
+            
+            // trigger calculating traveling by train co2 Emissions every 1s
+            co2EmissionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(callCalculateTravelingByTrainCo2Emissions) userInfo:nil repeats:YES];
+            
+        }
         
     }
 }
@@ -85,10 +139,6 @@
     // filter possible gps data errors
     newValidLocation = [self getNewValidLocation:newLocation];
     
-    // create a starting point
-    if (startingPoint == nil) {
-        startingPoint = newValidLocation;
-    }
     
     // only start GPS tracking if horizontal accuracy is < 10m
     if (newValidLocation.horizontalAccuracy > 10) {
@@ -101,6 +151,11 @@
         
         // Stop activity indicator animation
         [self progressHUDWheelStop];
+        
+        // create a starting point for distance calculation
+        if (startingPoint == nil) {
+            startingPoint = newValidLocation;
+        }
             
         // get horizontal accuracy
         locationDataObject.horizontalAccuracy = newValidLocation.horizontalAccuracy;
@@ -112,7 +167,7 @@
         // get vertical accuracy
         locationDataObject.verticalAccuracy = newValidLocation.verticalAccuracy;
         
-        // get accurate elevation (altitude) from Google Maps - every 10m
+        // get accurate elevation (altitude) from Google Maps - every 20m
         // set the initial location for elevation point
         if (elevationCaptureStartPoint == nil) {
             
@@ -124,11 +179,14 @@
                 [elevationRequest requestElevation:elevationCaptureStartPoint.coordinate.latitude :elevationCaptureStartPoint.coordinate.longitude];
                 
                 while (!elevationRequest.isDownloaded) {
-                    NSLog(@"Downloading...");
+                    _elevation.text = @"Receiving...";
+                    NSLog(@"Receiving..");
                 }
                                             
                 locationDataObject.elevationOne = elevationRequest.elevation;
                 elevationRequest.isDownloaded = false;
+                
+                _elevation.text = [locationDataObject getFormattedElevationOne];
                 
                 NSLog(@"ElevationOne is %f", locationDataObject.elevationOne);
                 
@@ -138,7 +196,7 @@
         }
         
         CLLocation *elevationCaptureFinishPoint = newValidLocation;
-        if ([elevationCaptureFinishPoint distanceFromLocation: elevationCaptureStartPoint] >= 10) {
+        if ([elevationCaptureFinishPoint distanceFromLocation: elevationCaptureStartPoint] >= 20) {
             
             dispatch_queue_t myQueue2 = dispatch_queue_create("pem.myQueue2", 0);
             dispatch_async(myQueue2, ^{
@@ -146,7 +204,8 @@
                 [elevationRequest requestElevation:elevationCaptureFinishPoint.coordinate.latitude :elevationCaptureFinishPoint.coordinate.longitude];
 
                 while (!elevationRequest.isDownloaded) {
-                    NSLog(@"Downloading...");
+                    _elevation.text = @"Receiving...";
+                    NSLog(@"Receiving..");
                 }
                 
                 locationDataObject.elevationTwo = elevationRequest.elevation;
@@ -155,12 +214,29 @@
                 elevationRequest.isDownloaded = false;
 
                 
-                // calculate grade on distance of 10m
-                locationDataObject.grade = [self calculateGrade:locationDataObject.elevationOne :locationDataObject.elevationTwo];
-                                
+                // calculate grade on distance of 20m
+                locationDataObject.grade = [metabolicCalculations calculateGrade:locationDataObject.elevationOne :locationDataObject.elevationTwo];
+                
+                // output current grade calculation
                 _grade.text = [locationDataObject getFormattedGrade];
                 
-                elevationCaptureStartPoint = newValidLocation;
+                
+                // capture lowest grade
+                if(locationDataObject.grade < locationDataObject.lowestGrade) {
+                    locationDataObject.lowestGrade = locationDataObject.grade;
+                }
+                
+                // capture highest grade
+                if(locationDataObject.grade > locationDataObject.highestGrade) {
+                    locationDataObject.highestGrade = locationDataObject.grade;
+                }
+                
+                // calculate average grade
+                locationDataObject.averageGrade = [metabolicCalculations getAverageGrade:locationDataObject];
+                
+                // update elevationCaptureStartPoint
+                elevationCaptureStartPoint = elevationCaptureFinishPoint;
+                locationDataObject.elevationOne = locationDataObject.elevationTwo;
             
                 NSLog(@"ElevationTwo is %f", locationDataObject.elevationTwo);
 
@@ -170,7 +246,7 @@
         }
         
         
-        // get speed in m/s
+        // save speed in m/s
         locationDataObject.speed = newValidLocation.speed;
         _speed.text = [locationDataObject getFormattedSpeed];
         
@@ -184,6 +260,8 @@
         // this filters out calculating distance from non-accurate GPS data
         // when user is not moving
         if (locationDataObject.speed > 0.70) {
+            // filter possible gps data errors
+            newValidLocation = [self getNewValidLocation:newLocation];
             locationDataObject.distanceTravelled += [newValidLocation distanceFromLocation:startingPoint];
             _distanceTraveled.text = [locationDataObject getFormattedDistanceTravelled];
             startingPoint = newValidLocation;
@@ -213,14 +291,6 @@
                    ^{[MBProgressHUD hideHUDForView:self.view animated:YES];});
 }
 
-// calculate grade on distance of 10m
--(double)calculateGrade:(double)elevationOne:(double)elevationTwo {
-    
-    double rise = elevationTwo - elevationOne;
-    double grade = rise / 10;
-    return grade;
-}
-
 
 -(void)callCalculateWalkingVo2 {
     // calculate walking vo2
@@ -228,13 +298,53 @@
     _vo2.text = [locationDataObject getFormattedVo2];
 }
 
+-(void)callCalculateRunningVo2 {
+    // calculate running vo2
+    locationDataObject.vo2 += [metabolicCalculations calculateRunningVo2:locationDataObject];
+    _vo2.text = [locationDataObject getFormattedVo2];
+}
+
+-(void)callCalculateTravelingByCarVo2 {
+    // calculate driving vo2
+    locationDataObject.vo2 += [metabolicCalculations calculateTravelingByCarVo2:locationDataObject];
+    _vo2.text = [locationDataObject getFormattedVo2];
+}
+
+-(void)callCalculateTravelingByBusVo2 {
+    // calculate traveling by bus vo2
+    locationDataObject.vo2 += [metabolicCalculations calculateTravelingByBusVo2:locationDataObject];
+    _vo2.text = [locationDataObject getFormattedVo2];
+}
+
+-(void)callCalculateTravelingByTrainVo2 {
+    // calculate traveling by train vo2
+    locationDataObject.vo2 += [metabolicCalculations calculateTravelingByTrainVo2:locationDataObject];
+    _vo2.text = [locationDataObject getFormattedVo2];
+}
 
 -(void)callCalculateCalorieExpenditure {
-    // calculate calories
-    locationDataObject.calories += [metabolicCalculations calculateCalorieExpenditure:locationDataObject.vo2];
+    // calculate calories (Do not acccumulate as vo2 is accumulated already!)
+    locationDataObject.calories = [metabolicCalculations calculateCalorieExpenditure:locationDataObject.vo2];
     _calories.text = [locationDataObject getFormattedCalories];
 }
 
+-(void)callCalculateTravelingByCarCo2Emissions {
+    // calculate traveling by car co2 emissions
+    locationDataObject.co2emissions += [co2EmissionCalculations calculateTravelingByCarCo2emissions:locationDataObject];
+    _co2Emissions.text = [locationDataObject getFormattedco2Emissions];
+}
+
+-(void)callCalculateTravelingByBusCo2Emissions {
+    // calculate traveling by bus co2 emissions
+    locationDataObject.co2emissions += [co2EmissionCalculations calculateTravelingByBusCo2emissions:locationDataObject];
+    _co2Emissions.text = [locationDataObject getFormattedco2Emissions];
+}
+
+-(void)callCalculateTravelingByTrainCo2Emissions {
+    // calculate traveling by train co2 emissions
+    locationDataObject.co2emissions += [co2EmissionCalculations calculateTravelingByTrainCo2emissions:locationDataObject];
+    _co2Emissions.text = [locationDataObject getFormattedco2Emissions];
+}
 
 
 // GPS location data filter
@@ -320,6 +430,7 @@
     [self stopTimer];
     [vo2Timer invalidate];
     [calorieTimer invalidate];
+    [co2EmissionsTimer invalidate];
     trackingGPS = FALSE;
 }
 
@@ -329,10 +440,10 @@
     [[UIAlertView alloc] initWithTitle:@"Save the session?" 
                                message:nil
                               delegate:self
-                     cancelButtonTitle:@"No"
+                     cancelButtonTitle:@"Cancel"
                      otherButtonTitles:@"Yes", nil];
     
-    resetSessionAlert.tag = 2;
+    resetSessionAlert.tag = 1;
     [resetSessionAlert show]; 
 }
 
@@ -343,6 +454,7 @@
     
     [vo2Timer invalidate];
     [calorieTimer invalidate];
+    [co2EmissionsTimer invalidate];
     
     // reseting total distance
     locationDataObject.horizontalAccuracy = 0;
@@ -354,6 +466,7 @@
     locationDataObject.speed = 0;
     locationDataObject.grade = 0;
     locationDataObject.vo2 = 0;
+    locationDataObject.co2emissions = 0;
     locationDataObject.timeString = 0;
     locationDataObject.calories = 0;
     elevationCaptureStartPoint = nil;
@@ -365,14 +478,15 @@
 
 
 - (void)resetLabels {
-	_horizontalAccuracy.text = @"0.00";
-	_elevation.text = @"0.00";
-	_distanceTraveled.text = @"0.00";
+	_horizontalAccuracy.text = @"0.00 m";
+	_elevation.text = @"0.00 m";
+	_distanceTraveled.text = @"0.00 m";
 	_speed.text = @"0.00 km/h";
-    _grade.text = @"0.00";
+    _grade.text = @"0.00 %";
     _time.text = @"00:00:00";
-    _vo2.text = @"0.00";
-    _calories.text = @"0";
+    _vo2.text = @"0.00 mL/kg";
+    _co2Emissions.text = @"0.00 kgCO2";
+    _calories.text = @"0.00 kcal";
 }
 
 
@@ -434,7 +548,6 @@
                      cancelButtonTitle:@"OK"
                      otherButtonTitles:nil];
    
-    bodyWeightAlert.tag = 1;
     [bodyWeightAlert show];
 
 }
@@ -446,16 +559,7 @@
    
     switch (alertView.tag) {
             
-        case 1:
-            
-            if (buttonIndex == 0) {
-                
-                // switch back to the profile view to enter body weight
-                // [self performSegueWithIdentifier:@"profileViewSegue" sender:startTrackingButtonSender];
-            }
-            break;
-                
-        case 2:
+        case 1:    
             
             // Cancel button
             if (buttonIndex == 0) {
@@ -470,8 +574,9 @@
                 PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"saveSession"];
                 [self.navigationController pushViewController:trackingVC animated:YES];
             }
+
             break;
-            
+                
         default:
             break;
     }
@@ -505,15 +610,18 @@
 
 - (void)viewDidLoad {
     
-       
+    // set title
+    NSString *title = [[NSString alloc] initWithFormat:@"Tracking - %@", activity];
+    [self setTitle:title];
+    
     dbAccess = [[PEMDatabaseAccess alloc] init];
     locationDataObject = [[PEMLocationData alloc] init];
     locationDataCollection = [[PEMLocationDataCollection alloc] init];
     metabolicCalculations = [[PEMMetabolicCalculations alloc] init];
     elevationRequest = [[PEMElevationRequest alloc] init];
+    co2EmissionCalculations = [[PEMCO2EmissionCalculations alloc] init];
     
     trackingGPS = FALSE;
-    calculationDelay = TRUE;
     
     dataCenter = [PEMDataCenter shareDataCenter];
     
@@ -530,7 +638,8 @@
 }
 
 - (void)viewDidUnload {
-    
+    self.locationManager = nil;
+    self.mapView = nil;
     self.locationManager = nil;
 	self.horizontalAccuracy = nil;
 	self.elevation = nil;
@@ -539,7 +648,7 @@
     self.time = nil;
     self.calories = nil;
     self.vo2 = nil;
-    self.co2 = nil;
+    self.co2Emissions = nil;
     self.grade = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.

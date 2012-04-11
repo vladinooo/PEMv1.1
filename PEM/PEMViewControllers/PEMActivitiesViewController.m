@@ -40,12 +40,14 @@
 - (IBAction)walk:(id)sender {
     
     PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"tracking"];
+    trackingVC.activity = @"Walk";
     [self.navigationController pushViewController:trackingVC animated:YES];
 }
 
 - (IBAction)run:(id)sender {
     
     PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"tracking"];
+    trackingVC.activity = @"Run";
     [self.navigationController pushViewController:trackingVC animated:YES];
 
 }
@@ -53,6 +55,7 @@
 - (IBAction)car:(id)sender {
     
     PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"tracking"];
+    trackingVC.activity = @"Car";
     [self.navigationController pushViewController:trackingVC animated:YES];
 
 }
@@ -60,6 +63,7 @@
 - (IBAction)bus:(id)sender {
     
     PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"tracking"];
+    trackingVC.activity = @"Bus";
     [self.navigationController pushViewController:trackingVC animated:YES];
 
 }
@@ -67,6 +71,7 @@
 - (IBAction)train:(id)sender {
     
     PEMTrackingViewController *trackingVC = [self.storyboard instantiateViewControllerWithIdentifier:@"tracking"];
+    trackingVC.activity = @"Train";
     [self.navigationController pushViewController:trackingVC animated:YES];
 
 }

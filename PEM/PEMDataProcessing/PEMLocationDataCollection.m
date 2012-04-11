@@ -44,25 +44,34 @@
     
     // create location data records string
     NSString *altitude = [locationDataObject getFormattedAltitude];
-    NSString *altitudeRecord = [[NSString alloc] initWithFormat:@"Altitude: %@", altitude];
+    NSString *altitudeRecord = [[NSString alloc] initWithFormat:@"Altit: %@", altitude];
     
     NSString *verticalAccuracy = [locationDataObject getFormattedVerticalAccuracy];
-    NSString *verticalAccuracyRecord = [[NSString alloc] initWithFormat:@"Vertical Accuracy:  %@", verticalAccuracy]; 
+    NSString *verticalAccuracyRecord = [[NSString alloc] initWithFormat:@"Ver Acc:  %@", verticalAccuracy]; 
     
     NSString *elevationOne = [locationDataObject getFormattedElevationOne];
-    NSString *elevationOneRecord = [[NSString alloc] initWithFormat:@"Elevation 1: %@", elevationOne];
+    NSString *elevationOneRecord = [[NSString alloc] initWithFormat:@"Elev 1: %@", elevationOne];
 
     NSString *elevationTwo = [locationDataObject getFormattedElevationTwo];
-    NSString *elevationTwoRecord = [[NSString alloc] initWithFormat:@"Elevation 2: %@", elevationTwo];
+    NSString *elevationTwoRecord = [[NSString alloc] initWithFormat:@"Elev 2: %@", elevationTwo];
 
     NSString *distanceTravelled = [locationDataObject getFormattedDistanceTravelled];
-    NSString *distanceTravelledRecord = [[NSString alloc] initWithFormat:@"Distance travelled: %@", distanceTravelled];    
+    NSString *distanceTravelledRecord = [[NSString alloc] initWithFormat:@"Distance: %@", distanceTravelled];    
     
     NSString *speed = [locationDataObject getFormattedSpeed];
     NSString *speedRecord = [[NSString alloc] initWithFormat:@"Speed: %@", speed];
     
     NSString *grade = [locationDataObject getFormattedGrade];
-    NSString *gradeRecord = [[NSString alloc] initWithFormat:@"Grade: %@", grade];  
+    NSString *gradeRecord = [[NSString alloc] initWithFormat:@"Grade: %@", grade]; 
+    
+    NSString *lowestGrade = [locationDataObject getFormattedLowestGrade];
+    NSString *lowestGradeRecord = [[NSString alloc] initWithFormat:@"L grade : %@", lowestGrade];
+    
+    NSString *highestGrade = [locationDataObject getFormattedHighestGrade];
+    NSString *highestGradeRecord = [[NSString alloc] initWithFormat:@"H grade : %@", highestGrade];
+    
+    NSString *averageGrade = [locationDataObject getFormattedAverageGrade];
+    NSString *averageGradeRecord = [[NSString alloc] initWithFormat:@"Avg grade : %@", averageGrade];
     
     NSString *vo2 = [locationDataObject getFormattedVo2];
     NSString *vo2Record = [[NSString alloc] initWithFormat:@"VO2: %@", vo2];
@@ -73,7 +82,7 @@
     NSString *time = [locationDataObject getFormattedTime];
     NSString *timeRecord = [[NSString alloc] initWithFormat:@"Time: %@", time];
     
-    NSString *locationDataRecord = [[NSString alloc] initWithFormat: @"%@, %@, %@, %@, %@, %@, %@, %@, %@, %@", altitudeRecord, verticalAccuracyRecord, elevationOneRecord, elevationTwoRecord, distanceTravelledRecord, speedRecord, gradeRecord, vo2Record, caloriesRecord, timeRecord];
+    NSString *locationDataRecord = [[NSString alloc] initWithFormat: @"%@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@ %@", altitudeRecord, verticalAccuracyRecord, elevationOneRecord, elevationTwoRecord, distanceTravelledRecord, speedRecord, gradeRecord, lowestGradeRecord, highestGradeRecord, averageGradeRecord, vo2Record, caloriesRecord, timeRecord];
     
    // NSLog(@"Data: %@", locationDataRecord);
 

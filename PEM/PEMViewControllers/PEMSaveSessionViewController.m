@@ -59,11 +59,11 @@
     
     _statusMessage.text = @"Session saved successfully";
     
-    [self performSelector:@selector(switchBackToTrackingView) withObject:nil afterDelay: 1];
+    [self performSelector:@selector(switchBackToActivitiesView) withObject:nil afterDelay: 1];
     
 }
 
-- (void)switchBackToTrackingView {
+- (void)switchBackToActivitiesView {
 
     // switch back to tracking view
     [self performSegueWithIdentifier:@"fromSaveToActivities" sender:self];

@@ -6,11 +6,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
     <scenes>
-        <!--Activities View Controller - Modes of Transport-->
+        <!--Activities View Controller - Activities-->
         <scene sceneID="kFu-G6-tiZ">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Z0-ir-qge" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="" id="i6X-fn-Zyw" customClass="PEMActivitiesViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="activitiesVC" id="i6X-fn-Zyw" customClass="PEMActivitiesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lqi-HQ-BoE">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -93,7 +93,7 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Modes of Transport" id="L8L-RT-YnY">
+                    <navigationItem key="navigationItem" title="Activities" id="L8L-RT-YnY">
                         <barButtonItem key="backBarButtonItem" title="Activities" id="RAn-Ce-GLx"/>
                     </navigationItem>
                 </viewController>
@@ -250,21 +250,21 @@
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="73L-2H-V7r">
-                                <rect key="frame" x="239" y="185" width="58" height="15"/>
+                                <rect key="frame" x="220" y="185" width="77" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="10"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="CO2:" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="d7n-HF-1JC">
-                                <rect key="frame" x="226" y="254" width="71" height="15"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="CO2 Emissions:" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="d7n-HF-1JC">
+                                <rect key="frame" x="220" y="254" width="77" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="10"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="kTg-h1-nel">
-                                <rect key="frame" x="239" y="277" width="58" height="15"/>
+                                <rect key="frame" x="220" y="277" width="77" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="10"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -278,7 +278,7 @@
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="MEa-i6-2dB">
-                                <rect key="frame" x="239" y="231" width="61" height="15"/>
+                                <rect key="frame" x="220" y="231" width="80" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="10"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -287,12 +287,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Tracking" id="L9s-Sv-fYe"/>
+                    <navigationItem key="navigationItem" title="Tracking" id="zEJ-pM-vzl">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="tMz-j3-3d0">
+                            <connections>
+                                <action selector="saveSessionAlert:" destination="2" id="gFs-zR-416"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="calories" destination="MEa-i6-2dB" id="0qT-Xs-r7q"/>
-                        <outlet property="co2" destination="kTg-h1-nel" id="kmd-6r-RYj"/>
+                        <outlet property="co2Emissions" destination="kTg-h1-nel" id="mG5-A1-uiH"/>
                         <outlet property="distanceTraveled" destination="y1o-ff-kAR" id="irY-2q-qCm"/>
                         <outlet property="elevation" destination="a8j-V5-pgn" id="NoA-Lp-743"/>
                         <outlet property="grade" destination="pxB-0q-jIQ" id="6RA-TE-p6T"/>
@@ -822,8 +828,8 @@
                         <outlet property="email" destination="U7Z-D6-wcT" id="tzf-hF-k9t"/>
                         <outlet property="password" destination="vbW-1i-9YT" id="EWZ-cX-Khm"/>
                         <outlet property="statusMessage" destination="chE-eD-buh" id="i0X-fb-mpu"/>
-                        <segue destination="4" kind="modal" identifier="goToProfileView" modalTransitionStyle="flipHorizontal" id="7bL-rD-Scq"/>
                         <segue destination="mde-Cd-49q" kind="modal" identifier="goToCreateProfileView" modalTransitionStyle="coverVertical" id="3gI-On-5CQ"/>
+                        <segue destination="4" kind="modal" identifier="goToProfileView" modalTransitionStyle="flipHorizontal" id="7bL-rD-Scq"/>
                     </connections>
                 </viewController>
             </objects>
@@ -1124,7 +1130,7 @@
                 <relationship kind="action" name="saveSessionAlert:"/>
                 <relationship kind="action" name="startTracking:"/>
                 <relationship kind="outlet" name="calories" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="co2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="co2Emissions" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="distanceTraveled" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="elevation" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="grade" candidateClass="UILabel"/>
@@ -1143,6 +1149,5 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="JVB-MQ-IRF"/>
-        <segue reference="Ghd-yt-nqK"/>
     </inferredMetricsTieBreakers>
 </document>

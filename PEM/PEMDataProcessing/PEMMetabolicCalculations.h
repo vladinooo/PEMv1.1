@@ -15,7 +15,19 @@
 
 @property (strong, nonatomic) PEMDataCenter *dataCenter;
 
+-(double)getAverageGrade:(PEMLocationData *)locationDataObject;
+
+-(double)calculateGrade:(double)elevationOne:(double)elevationTwo;
+
 -(double)calculateWalkingVo2:(PEMLocationData *)locationDataObject;
+
+-(double)calculateRunningVo2:(PEMLocationData *)locationDataObject;
+
+-(double)calculateTravelingByCarVo2:(PEMLocationData *)locationDataObject;
+
+-(double)calculateTravelingByBusVo2:(PEMLocationData *)locationDataObject;
+
+-(double)calculateTravelingByTrainVo2:(PEMLocationData *)locationDataObject;
 
 -(double)calculateCalorieExpenditure:(double)vO2;
 

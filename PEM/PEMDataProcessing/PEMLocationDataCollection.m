@@ -79,10 +79,10 @@
     NSString *calories = [locationDataObject getFormattedCalories];
     NSString *caloriesRecord = [[NSString alloc] initWithFormat:@"Calories: %@", calories];
     
-    NSString *time = [locationDataObject getFormattedTime];
-    NSString *timeRecord = [[NSString alloc] initWithFormat:@"Time: %@", time];
+    NSString *totalTime = [locationDataObject getFormattedTotalTime];
+    NSString *totalTimeRecord = [[NSString alloc] initWithFormat:@"Time: %@", totalTime];
     
-    NSString *locationDataRecord = [[NSString alloc] initWithFormat: @"%@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@ %@", altitudeRecord, verticalAccuracyRecord, elevationOneRecord, elevationTwoRecord, distanceTravelledRecord, speedRecord, gradeRecord, lowestGradeRecord, highestGradeRecord, averageGradeRecord, vo2Record, caloriesRecord, timeRecord];
+    NSString *locationDataRecord = [[NSString alloc] initWithFormat: @"%@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@ %@", altitudeRecord, verticalAccuracyRecord, elevationOneRecord, elevationTwoRecord, distanceTravelledRecord, speedRecord, gradeRecord, lowestGradeRecord, highestGradeRecord, averageGradeRecord, vo2Record, caloriesRecord, totalTimeRecord];
     
    // NSLog(@"Data: %@", locationDataRecord);
 

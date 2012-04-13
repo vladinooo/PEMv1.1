@@ -11,11 +11,11 @@
 
 @implementation PEMProfile
 
-@synthesize bodyWeight;
-@synthesize email;
 @synthesize firstName;
 @synthesize lastName;
+@synthesize email;
 @synthesize password;
+@synthesize bodyWeight;
 @synthesize sessions;
 
 @end

@@ -54,6 +54,8 @@
 @property (strong, nonatomic) PEMElevationRequest *elevationRequest;
 @property (strong, nonatomic) NSString *activity;
 @property (strong, nonatomic) PEMCO2EmissionCalculations *co2EmissionCalculations;
+@property (strong, nonatomic) NSDateFormatter *formatter;
+
 
 
 -(IBAction)startTracking:(id)sender;

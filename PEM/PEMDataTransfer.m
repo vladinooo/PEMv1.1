@@ -105,14 +105,17 @@
     [profileMapping mapKeyPath:@"bodyWeight" toAttribute:@"bodyWeight"];
     
     RKObjectMapping *sessionMapping = [RKObjectMapping mappingForClass:[NSMutableDictionary class]];
-    [sessionMapping mapKeyPath:@"date" toAttribute:@"date"];
     [sessionMapping mapKeyPath:@"sessionName" toAttribute:@"sessionName"];
-    [sessionMapping mapKeyPath:@"modeOfTransport" toAttribute:@"modeOfTransport"];
-    [sessionMapping mapKeyPath:@"caloriesBurned" toAttribute:@"caloriesBurned"];
-    [sessionMapping mapKeyPath:@"distance" toAttribute:@"distance"];
-    [sessionMapping mapKeyPath:@"time" toAttribute:@"time"];
-    [sessionMapping mapKeyPath:@"speed" toAttribute:@"speed"];
-    [sessionMapping mapKeyPath:@"cO2Emission" toAttribute:@"cO2Emission"];
+    [sessionMapping mapKeyPath:@"date" toAttribute:@"date"];
+    [sessionMapping mapKeyPath:@"activity" toAttribute:@"activity"];
+    [sessionMapping mapKeyPath:@"distanceTravelled" toAttribute:@"distanceTravelled"];
+    [sessionMapping mapKeyPath:@"totalTime" toAttribute:@"totalTime"];
+    [sessionMapping mapKeyPath:@"highestSpeed" toAttribute:@"highestSpeed"];
+    [sessionMapping mapKeyPath:@"averageGrade" toAttribute:@"averageGrade"];
+    [sessionMapping mapKeyPath:@"vo2" toAttribute:@"vo2"];
+    [sessionMapping mapKeyPath:@"calories" toAttribute:@"calories"];
+    [sessionMapping mapKeyPath:@"co2Emissions" toAttribute:@"co2Emissions"];
+
     
     // Define the relationship mapping
     [profileMapping mapKeyPath:@"sessions" toRelationship:@"sessions" withMapping:sessionMapping];
@@ -179,14 +182,17 @@
     NSMutableArray *sessions = [[NSMutableArray alloc] init];
     for (NSManagedObject *sessionFromDb in results2) {
         PEMSession *session = [[PEMSession alloc] init];
-        session.date = [sessionFromDb valueForKey:@"date"];
         session.sessionName = [sessionFromDb valueForKey:@"sessionName"];
-        session.modeOfTransport = [sessionFromDb valueForKey:@"modeOfTransport"];
-        session.caloriesBurned = [sessionFromDb valueForKey:@"caloriesBurned"];
-        session.distance = [sessionFromDb valueForKey:@"distance"];
-        session.time = [sessionFromDb valueForKey:@"time"];
-        session.speed = [sessionFromDb valueForKey:@"speed"];
-        session.cO2Emission = [sessionFromDb valueForKey:@"cO2Emission"];
+        session.date = [sessionFromDb valueForKey:@"date"];
+        session.activity = [sessionFromDb valueForKey:@"activity"];
+        session.distanceTravelled = [sessionFromDb valueForKey:@"distanceTravelled"];
+        session.totalTime = [sessionFromDb valueForKey:@"totalTime"];
+        session.highestSpeed = [sessionFromDb valueForKey:@"highestSpeed"];
+        session.averageGrade = [sessionFromDb valueForKey:@"averageGrade"];
+        session.vo2 = [sessionFromDb valueForKey:@"vo2"];
+        session.calories = [sessionFromDb valueForKey:@"calories"];
+        session.co2Emissions = [sessionFromDb valueForKey:@"co2Emissions"];
+
         [sessions addObject:session];
         NSLog(@"Session: %@", session.sessionName);
     }

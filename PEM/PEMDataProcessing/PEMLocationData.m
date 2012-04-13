@@ -37,7 +37,7 @@
 @synthesize highestGradeString;
 @synthesize averageGradeString;
 @synthesize vo2String;
-@synthesize timeString;
+@synthesize totalTimeString;
 @synthesize caloriesString;
 @synthesize co2EmissionsString;
 
@@ -99,16 +99,26 @@
     return vo2String = [[NSString alloc] initWithFormat:@"%.2lf%@", vo2, @" mL/kg"];
 }
 
--(NSString *)getFormattedTime {
-    return timeString;
+-(NSString *)getFormattedTotalTime {
+    return totalTimeString;
 }
 
 -(NSString *)getFormattedCalories {
     return caloriesString = [[NSString alloc] initWithFormat:@"%.2lf%@", calories, @" kcal"];
 }
 
+-(NSString *)getFormattedCaloriesPure {
+    NSString *caloriesPureString = [[NSString alloc] initWithFormat:@"%.2lf", calories];
+    return caloriesPureString;
+}
+
 -(NSString *)getFormattedco2Emissions {
     return co2EmissionsString = [[NSString alloc] initWithFormat:@"%.2lf%@", co2emissions, @" kgCO2"];
+}
+
+-(NSString *)getFormattedco2EmissionsPure {
+    NSString *co2EmissionsPureString = [[NSString alloc] initWithFormat:@"%.2lf", co2emissions];
+    return co2EmissionsPureString;
 }
 
 @end

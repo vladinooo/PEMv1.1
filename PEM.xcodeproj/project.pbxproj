@@ -10,7 +10,10 @@
 		850D160D14B3C425006F855F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 850D160C14B3C425006F855F /* MapKit.framework */; };
 		850D161014B3C42B006F855F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 850D160F14B3C42B006F855F /* CoreLocation.framework */; };
 		8510AC951535974B0095135E /* PEMCO2EmissionCalculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8510AC941535974B0095135E /* PEMCO2EmissionCalculations.m */; };
-		8510AC98153597780095135E /* PEMCO2EmissionRecommendations.m in Sources */ = {isa = PBXBuildFile; fileRef = 8510AC97153597780095135E /* PEMCO2EmissionRecommendations.m */; };
+		852889DB15366DE6007F7AE1 /* sessions.png in Resources */ = {isa = PBXBuildFile; fileRef = 852889D815366DE6007F7AE1 /* sessions.png */; };
+		852889DC15366DE6007F7AE1 /* tracking.png in Resources */ = {isa = PBXBuildFile; fileRef = 852889D915366DE6007F7AE1 /* tracking.png */; };
+		852889DE15366E55007F7AE1 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 852889DD15366E55007F7AE1 /* profile.png */; };
+		852889E8153679D7007F7AE1 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 852889E7153679D7007F7AE1 /* Icon@2x.png */; };
 		852F36ED1533490A0087D826 /* PEMElevationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 852F36EC153349090087D826 /* PEMElevationRequest.m */; };
 		852F375215336DC10087D826 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 852F373A15336DC10087D826 /* NSObject+SBJson.m */; };
 		852F375315336DC10087D826 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 852F373D15336DC10087D826 /* SBJsonParser.m */; };
@@ -61,6 +64,8 @@
 		858DB01E1525273B00664D99 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 858DB01D1525273B00664D99 /* QuartzCore.framework */; };
 		858DB0201525275700664D99 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 858DB01F1525275700664D99 /* libxml2.dylib */; };
 		85AE28491523DF2700BC67E6 /* PEMDataTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 85AE28481523DF2700BC67E6 /* PEMDataTransfer.m */; };
+		85D4CA7C15360D1B00E4358F /* globe.png in Resources */ = {isa = PBXBuildFile; fileRef = 85D4CA7A15360D1B00E4358F /* globe.png */; };
+		85D4CA7D15360D1B00E4358F /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = 85D4CA7B15360D1B00E4358F /* heart.png */; };
 		85E0FA3C149A04E400211038 /* PEMTextFieldValidation.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E0FA3B149A04E400211038 /* PEMTextFieldValidation.m */; };
 		85E0FA40149A16C000211038 /* PEMDatabaseAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E0FA3F149A16C000211038 /* PEMDatabaseAccess.m */; };
 		85F51D6D1530BDA8000F69CA /* PEMMetabolicCalculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F51D6C1530BDA8000F69CA /* PEMMetabolicCalculations.m */; };
@@ -109,8 +114,10 @@
 		850D160F14B3C42B006F855F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8510AC931535974B0095135E /* PEMCO2EmissionCalculations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMCO2EmissionCalculations.h; path = PEMDataProcessing/PEMCO2EmissionCalculations.h; sourceTree = "<group>"; };
 		8510AC941535974B0095135E /* PEMCO2EmissionCalculations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMCO2EmissionCalculations.m; path = PEMDataProcessing/PEMCO2EmissionCalculations.m; sourceTree = "<group>"; };
-		8510AC96153597780095135E /* PEMCO2EmissionRecommendations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMCO2EmissionRecommendations.h; path = PEMDataProcessing/PEMCO2EmissionRecommendations.h; sourceTree = "<group>"; };
-		8510AC97153597780095135E /* PEMCO2EmissionRecommendations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMCO2EmissionRecommendations.m; path = PEMDataProcessing/PEMCO2EmissionRecommendations.m; sourceTree = "<group>"; };
+		852889D815366DE6007F7AE1 /* sessions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sessions.png; sourceTree = "<group>"; };
+		852889D915366DE6007F7AE1 /* tracking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tracking.png; sourceTree = "<group>"; };
+		852889DD15366E55007F7AE1 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile.png; sourceTree = "<group>"; };
+		852889E7153679D7007F7AE1 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		852F36EB153349090087D826 /* PEMElevationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMElevationRequest.h; path = PEMDataProcessing/PEMElevationRequest.h; sourceTree = "<group>"; };
 		852F36EC153349090087D826 /* PEMElevationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMElevationRequest.m; path = PEMDataProcessing/PEMElevationRequest.m; sourceTree = "<group>"; };
 		852F373915336DC10087D826 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+SBJson.h"; path = "JSON/NSObject+SBJson.h"; sourceTree = "<group>"; };
@@ -195,6 +202,8 @@
 		858DB01F1525275700664D99 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		85AE28471523DF2700BC67E6 /* PEMDataTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PEMDataTransfer.h; sourceTree = "<group>"; };
 		85AE28481523DF2700BC67E6 /* PEMDataTransfer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEMDataTransfer.m; sourceTree = "<group>"; };
+		85D4CA7A15360D1B00E4358F /* globe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = globe.png; sourceTree = "<group>"; };
+		85D4CA7B15360D1B00E4358F /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
 		85E0FA3A149A04E400211038 /* PEMTextFieldValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PEMTextFieldValidation.h; sourceTree = "<group>"; };
 		85E0FA3B149A04E400211038 /* PEMTextFieldValidation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEMTextFieldValidation.m; sourceTree = "<group>"; };
 		85E0FA3E149A16C000211038 /* PEMDatabaseAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PEMDatabaseAccess.h; sourceTree = "<group>"; };
@@ -262,8 +271,6 @@
 		8530875A152F2FCA00EE04C9 /* PEMDataProcessing */ = {
 			isa = PBXGroup;
 			children = (
-				852F36EB153349090087D826 /* PEMElevationRequest.h */,
-				852F36EC153349090087D826 /* PEMElevationRequest.m */,
 				85308769152F36F300EE04C9 /* PEMLocationData.h */,
 				8530876A152F36F300EE04C9 /* PEMLocationData.m */,
 				8530875D152F300300EE04C9 /* PEMLocationDataCollection.h */,
@@ -273,8 +280,8 @@
 				85F51D6C1530BDA8000F69CA /* PEMMetabolicCalculations.m */,
 				8510AC931535974B0095135E /* PEMCO2EmissionCalculations.h */,
 				8510AC941535974B0095135E /* PEMCO2EmissionCalculations.m */,
-				8510AC96153597780095135E /* PEMCO2EmissionRecommendations.h */,
-				8510AC97153597780095135E /* PEMCO2EmissionRecommendations.m */,
+				852F36EB153349090087D826 /* PEMElevationRequest.h */,
+				852F36EC153349090087D826 /* PEMElevationRequest.m */,
 			);
 			name = PEMDataProcessing;
 			sourceTree = "<group>";
@@ -340,6 +347,12 @@
 				854128B514957CAB00B9934D /* first.png */,
 				854128B714957CAB00B9934D /* first@2x.png */,
 				854128BC14957CAB00B9934D /* second.png */,
+				85D4CA7A15360D1B00E4358F /* globe.png */,
+				852889DD15366E55007F7AE1 /* profile.png */,
+				852889D815366DE6007F7AE1 /* sessions.png */,
+				852889E7153679D7007F7AE1 /* Icon@2x.png */,
+				852889D915366DE6007F7AE1 /* tracking.png */,
+				85D4CA7B15360D1B00E4358F /* heart.png */,
 				854128BE14957CAB00B9934D /* second@2x.png */,
 				854128A414957CAB00B9934D /* Supporting Files */,
 			);
@@ -507,6 +520,12 @@
 				854128BF14957CAB00B9934D /* second@2x.png in Resources */,
 				8576CD7B1497A6D600DAC001 /* MainStoryboard.storyboard in Resources */,
 				85308762152F300300EE04C9 /* PEMLocationDataStorage.plist in Resources */,
+				85D4CA7C15360D1B00E4358F /* globe.png in Resources */,
+				85D4CA7D15360D1B00E4358F /* heart.png in Resources */,
+				852889DB15366DE6007F7AE1 /* sessions.png in Resources */,
+				852889DC15366DE6007F7AE1 /* tracking.png in Resources */,
+				852889DE15366E55007F7AE1 /* profile.png in Resources */,
+				852889E8153679D7007F7AE1 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,7 +572,6 @@
 				852F375C15336DC10087D826 /* SBJsonUTF8Stream.m in Sources */,
 				852F375D15336DC10087D826 /* SBJsonWriter.m in Sources */,
 				8510AC951535974B0095135E /* PEMCO2EmissionCalculations.m in Sources */,
-				8510AC98153597780095135E /* PEMCO2EmissionRecommendations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -39,6 +39,7 @@
 @synthesize elevationRequest;
 @synthesize activity;
 @synthesize co2EmissionCalculations;
+@synthesize formatter;
 
 
 // start gps tracking and timer
@@ -467,7 +468,7 @@
     locationDataObject.grade = 0;
     locationDataObject.vo2 = 0;
     locationDataObject.co2emissions = 0;
-    locationDataObject.timeString = 0;
+    locationDataObject.totalTimeString = 0;
     locationDataObject.calories = 0;
     elevationCaptureStartPoint = nil;
 
@@ -519,8 +520,8 @@
     hours = tick / 3600;
     minutes = (tick % 3600) / 60;
     seconds = (tick %3600) % 60;
-    locationDataObject.timeString = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
-    _time.text = locationDataObject.timeString;
+    locationDataObject.totalTimeString = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+    _time.text = locationDataObject.totalTimeString;
 }
 
 
@@ -586,18 +587,24 @@
 // capture session
 - (void)captureSessionData {
     PEMSession *tempSession = [[PEMSession alloc] init];
-    tempSession.date = @"";
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd-MMM-yyyy HH:mm"];
+    NSString *dateString = [formatter stringFromDate:[NSDate date]];
+    
     tempSession.sessionName = @"";
-    tempSession.modeOfTransport = @"";
-    tempSession.caloriesBurned = _calories.text;
-    tempSession.distance = _distanceTraveled.text;
-    tempSession.time = _time.text;
-    tempSession.speed = [NSString stringWithFormat:@"%f", highestSpeed];
-    tempSession.cO2Emission = @"";
+    tempSession.date = dateString;
+    tempSession.activity = activity;
+    tempSession.distanceTravelled = [locationDataObject getFormattedDistanceTravelled];
+    tempSession.totalTime = [locationDataObject getFormattedTotalTime];
+    NSString *highestSpeedString = [[NSString alloc] initWithFormat:@"%.2lf%@", highestSpeed, @" km/h"];
+    tempSession.highestSpeed = highestSpeedString;
+    tempSession.averageGrade = [locationDataObject getFormattedAverageGrade];
+    tempSession.vo2 = [locationDataObject getFormattedVo2];
+    tempSession.calories = [locationDataObject getFormattedCaloriesPure];
+    tempSession.co2Emissions = [locationDataObject getFormattedco2EmissionsPure];
 
     // save sessionData to dataCentre for sharing
     dataCenter.session = tempSession;
-    NSLog(@"Session calories are: %@", dataCenter.session.caloriesBurned);
 }
 
 
@@ -659,7 +666,7 @@
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {    
     [super viewDidAppear:animated];
 }
 

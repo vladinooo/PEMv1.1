@@ -37,7 +37,7 @@
 @property (nonatomic, retain) NSString *highestGradeString;
 @property (nonatomic, retain) NSString *averageGradeString;
 @property (nonatomic, retain) NSString *vo2String;
-@property (nonatomic, retain) NSString *timeString;
+@property (nonatomic, retain) NSString *totalTimeString;
 @property (nonatomic, retain) NSString *caloriesString;
 @property (nonatomic, retain) NSString *co2EmissionsString;
 
@@ -53,9 +53,11 @@
 -(NSString *)getFormattedHighestGrade;
 -(NSString *)getFormattedAverageGrade;
 -(NSString *)getFormattedVo2;
--(NSString *)getFormattedTime;
+-(NSString *)getFormattedTotalTime;
 -(NSString *)getFormattedCalories;
+-(NSString *)getFormattedCaloriesPure;
 -(NSString *)getFormattedco2Emissions;
+-(NSString *)getFormattedco2EmissionsPure;
 
 
 @end

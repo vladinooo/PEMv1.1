@@ -105,8 +105,11 @@
     
     // Configure the cell...
     
+    cell.selectionStyle = UITableViewCellSelectionStyleGray; 
+    
     cell.textLabel.text = [[sessions objectAtIndex:indexPath.row] valueForKey:@"sessionName"];
-    NSString *caloriesBurned = [NSString stringWithFormat:@"%@ %@",[[sessions objectAtIndex:indexPath.row] valueForKey:@"caloriesBurned"], @"calories"];
+    NSString *caloriesBurned =
+    [NSString stringWithFormat:@"%@",[[sessions objectAtIndex:indexPath.row] valueForKey:@"date"]];
     cell.detailTextLabel.text = caloriesBurned;
     
     return cell;
@@ -121,12 +124,20 @@
     // push session sedails to details view
     PEMSessionDetailsViewController *sessionDetailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"sessionDetails"];
     
-    sessionDetailsVC.sessionName = [[sessions objectAtIndex:indexPath.row] valueForKey:@"sessionName"];
-    sessionDetailsVC.caloriesBurned = [[sessions objectAtIndex:indexPath.row] valueForKey:@"caloriesBurned"];
-    sessionDetailsVC.distance = [[sessions objectAtIndex:indexPath.row] valueForKey:@"distance"];
-    sessionDetailsVC.time = [[sessions objectAtIndex:indexPath.row] valueForKey:@"time"];
-    sessionDetailsVC.speed = [[sessions objectAtIndex:indexPath.row] valueForKey:@"speed"];
-    sessionDetailsVC.co2Emission = [[sessions objectAtIndex:indexPath.row] valueForKey:@"cO2Emission"];
+    sessionDetailsVC.sessionNameString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"sessionName"];
+    sessionDetailsVC.dateString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"date"];
+    sessionDetailsVC.activityString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"activity"];
+    sessionDetailsVC.distanceTravelledString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"distanceTravelled"];
+    sessionDetailsVC.totalTimeString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"totalTime"];
+    sessionDetailsVC.highestSpeedString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"highestSpeed"];
+    sessionDetailsVC.averageGradeString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"averageGrade"];
+    sessionDetailsVC.vo2String = [[sessions objectAtIndex:indexPath.row] valueForKey:@"vo2"];
+    sessionDetailsVC.caloriesString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"calories"];
+    sessionDetailsVC.caloriesBigString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"calories"];
+    sessionDetailsVC.co2EmissionsString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"co2Emissions"];
+    sessionDetailsVC.co2EmissionsBigString = [[sessions objectAtIndex:indexPath.row] valueForKey:@"co2Emissions"];
+
+
     
     [self.navigationController pushViewController:sessionDetailsVC animated:YES];
     

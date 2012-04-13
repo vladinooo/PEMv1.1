@@ -10,13 +10,15 @@
 
 @implementation PEMSession
 
-@synthesize caloriesBurned;
-@synthesize cO2Emission;
-@synthesize distance;
 @synthesize sessionName;
-@synthesize time;
-@synthesize speed;
 @synthesize date;
-@synthesize modeOfTransport;
+@synthesize activity;
+@synthesize distanceTravelled;
+@synthesize totalTime;
+@synthesize highestSpeed;
+@synthesize averageGrade;
+@synthesize vo2;
+@synthesize calories;
+@synthesize co2Emissions;
 
 @end

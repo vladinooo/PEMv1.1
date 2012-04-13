@@ -54,14 +54,16 @@
     NSManagedObject *managedObject = [NSEntityDescription
     insertNewObjectForEntityForName: @"Session" inManagedObjectContext:context];
 
-    [managedObject setValue:session.date forKey:@"date"];
     [managedObject setValue:session.sessionName forKey:@"sessionName"];
-    [managedObject setValue:session.modeOfTransport forKey:@"modeOfTransport"];
-    [managedObject setValue:session.caloriesBurned forKey:@"caloriesBurned"];
-    [managedObject setValue:session.distance forKey:@"distance"];
-    [managedObject setValue:session.time forKey:@"time"];
-    [managedObject setValue:session.speed forKey:@"speed"];
-    [managedObject setValue:session.cO2Emission forKey:@"cO2Emission"];
+    [managedObject setValue:session.date forKey:@"date"];
+    [managedObject setValue:session.activity forKey:@"activity"];
+    [managedObject setValue:session.distanceTravelled forKey:@"distanceTravelled"];
+    [managedObject setValue:session.totalTime forKey:@"totalTime"];
+    [managedObject setValue:session.highestSpeed forKey:@"highestSpeed"];
+    [managedObject setValue:session.averageGrade forKey:@"averageGrade"];
+    [managedObject setValue:session.vo2 forKey:@"vo2"];
+    [managedObject setValue:session.calories forKey:@"calories"];
+    [managedObject setValue:session.co2Emissions forKey:@"co2Emissions"];
     
     // save to database
     NSError *error;

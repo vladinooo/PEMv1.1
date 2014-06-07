@@ -84,14 +84,16 @@
 }
 
 -(NSString *)getFormattedLowestGrade {
-    return lowestGradeString = [[NSString alloc] initWithFormat:@"%.2lf%@", lowestGrade, @" %"];
+    return lowestGradeString = [[NSString alloc] initWithFormat:@"%.2lf", lowestGrade];
 }
 
 -(NSString *)getFormattedHighestGrade {
-    return highestGradeString = [[NSString alloc] initWithFormat:@"%.2lf%@", highestGrade, @" %"];
+    return highestGradeString = [[NSString alloc] initWithFormat:@"%.2lf", highestGrade];
 }
 
 -(NSString *)getFormattedAverageGrade {
+    // coonvert from decimals to %
+    averageGrade *= 100;
     return averageGradeString = [[NSString alloc] initWithFormat:@"%.2lf%@", averageGrade, @" %"];
 }
 

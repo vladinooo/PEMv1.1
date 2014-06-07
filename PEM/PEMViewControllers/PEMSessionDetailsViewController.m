@@ -59,7 +59,7 @@
 
 -(void)showPersonalWellbeingFooter {
     imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heart.png"]];
-    [imageView setFrame:CGRectMake(70,270,60,60)]; //Adjust X,Y,W,H as needed
+    [imageView setFrame:CGRectMake(70,335,60,60)]; //Adjust X,Y,W,H as needed
     [[self view] addSubview: imageView];
     
     _footerInfoTop.text = @"You've burned";
@@ -69,7 +69,7 @@
 
 -(void)showPlanetaryWellbeingFooter {
     imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"globe.png"]];
-    [imageView setFrame:CGRectMake(70,270,60,60)]; //Adjust X,Y,W,H as needed
+    [imageView setFrame:CGRectMake(70,335,60,60)]; //Adjust X,Y,W,H as needed
     [[self view] addSubview: imageView];
     
     _footerInfoTop.text = @"Carbon footprint";
@@ -131,7 +131,7 @@
 
 -(void)showPersonalWellbeingInfo {
     UIAlertView *personalWellbeingInfo =
-    [[UIAlertView alloc] initWithTitle:@"Personal wellbeing recommendation" 
+    [[UIAlertView alloc] initWithTitle:@"Personal wellbeing recommendations" 
                                message:@"Recommended daily calorie intake varies from person to person, but there are guidelines for calorie requirements you can use as a starting point. UK Department of Health Estimated Average Requirements (EAR) are a daily calorie intake of 1940 calories per day for women and 2550 for men. \n\nHow many calories are needed each day can vary greatly depending on lifestyle and other factors. Factors that affect your personal daily calorie needs include your age, height and weight, your basic level of daily activity, and your body composition. \n\nIn order to lose weight you need to eat less calories per day than your body needs. \n\nTo lose 1lb a week you need a negative calorie balance of 500 calories per day. To lose weight at 2lb a week you need to reduce your calorie intake by 1000 calories a day."
                               delegate:self
                      cancelButtonTitle:nil
@@ -142,7 +142,7 @@
 
 -(void)showPlanetarylWellbeingInfo {
     UIAlertView *personalWellbeingInfo =
-    [[UIAlertView alloc] initWithTitle:@"Planetary wellbeing recommendation" 
+    [[UIAlertView alloc] initWithTitle:@"Planetary wellbeing recommendations" 
                                message:@"Top tips on how to reduce your carbon footprint: \n\n1. Lighting/electricity. Low-cost or free options to reduce energy consumption include switching to low-energy lightbulbs or LED lighting, turning off lights and equipment when not in use and installing motion sensors or timer switches. \n\n2. Transportation. Newer is generally greener when it comes to vehicles, as older models are less efficient. But even older vehicles can be improved by fitting continuous regenerating traps (CRTs) and wind deflector kits. Maintaining the correct tyre pressure will also reduce fuel consumption. And consider using alternatives to fossil fuels like biodiesel, LPG and electricity. \n\n3. Water. Deal promptly with dripping taps and costly leaks and limit the amount of water used to flush toilets by switching to dual-flush models, or make older models more efficient by fitting water-displacement devices such as Hippos, which are cheap or free and easy to fit. Push taps or taps with sensors also save water, as does fitting flow regulators. \n\n4. Packaging. Swap single-use items like plastic cups for reusable options, and guest shampoo bottles and soap bars for refillable dispensers. Buy in bulk to save money and reduce landfill. \n\n5. Waste. Recycling produces less landfill and lowers the cost of waste disposal, as can balers and compactors. Recycling products like aluminium can raise money for charities, and recycling food waste by composting creates a useful product."
                               delegate:self
                      cancelButtonTitle:nil

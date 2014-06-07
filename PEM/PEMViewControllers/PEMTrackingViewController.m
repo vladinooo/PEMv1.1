@@ -331,19 +331,19 @@
 
 -(void)callCalculateTravelingByCarCo2Emissions {
     // calculate traveling by car co2 emissions
-    locationDataObject.co2emissions += [co2EmissionCalculations calculateTravelingByCarCo2emissions:locationDataObject];
+    locationDataObject.co2emissions = [co2EmissionCalculations calculateTravelingByCarCo2emissions:locationDataObject];
     _co2Emissions.text = [locationDataObject getFormattedco2Emissions];
 }
 
 -(void)callCalculateTravelingByBusCo2Emissions {
     // calculate traveling by bus co2 emissions
-    locationDataObject.co2emissions += [co2EmissionCalculations calculateTravelingByBusCo2emissions:locationDataObject];
+    locationDataObject.co2emissions = [co2EmissionCalculations calculateTravelingByBusCo2emissions:locationDataObject];
     _co2Emissions.text = [locationDataObject getFormattedco2Emissions];
 }
 
 -(void)callCalculateTravelingByTrainCo2Emissions {
     // calculate traveling by train co2 emissions
-    locationDataObject.co2emissions += [co2EmissionCalculations calculateTravelingByTrainCo2emissions:locationDataObject];
+    locationDataObject.co2emissions = [co2EmissionCalculations calculateTravelingByTrainCo2emissions:locationDataObject];
     _co2Emissions.text = [locationDataObject getFormattedco2Emissions];
 }
 

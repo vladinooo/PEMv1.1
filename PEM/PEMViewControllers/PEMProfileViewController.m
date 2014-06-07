@@ -124,7 +124,7 @@
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.6];
-    CGAffineTransform transfrom = CGAffineTransformMakeTranslation(0, 400);
+    CGAffineTransform transfrom = CGAffineTransformMakeTranslation(0, 720);
     _bodyWeightPicker.transform = transfrom;
     _bodyWeightPicker.alpha = _bodyWeightPicker.alpha * (-1) + 1;
     [UIView commitAnimations];    
@@ -186,7 +186,7 @@
         }
         
         else {
-            _statusMessage.text = @"Passwords don't match";
+            _statusMessage.text = @"Must match!"; //Passwords don't match
             [scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
         }
     }
@@ -198,7 +198,7 @@
         }
         
         else {
-            _statusMessage.text = @"Passwords don't match";
+            _statusMessage.text = @"Must match!"; //Passwords don't match
             [scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
         }
     }
